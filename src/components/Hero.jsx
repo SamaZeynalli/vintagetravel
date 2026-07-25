@@ -5,7 +5,7 @@ function Hero() {
   return (
     <section
       id="hero"
-      className="relative overflow-hidden border-b border-border bg-secondary"
+      className="relative scroll-mt-24 overflow-hidden border-b border-border bg-secondary"
     >
       {/* Logodakı kompas fon elementi kimi */}
       <img

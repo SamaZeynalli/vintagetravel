@@ -14,19 +14,36 @@ import { cn } from "@/lib/utils";
 
 function Tours() {
   const savedIds = useTourStore((state) => state.savedIds);
+  const showSavedOnly = useTourStore((state) => state.showSavedOnly);
   const toggleSaved = useTourStore((state) => state.toggleSaved);
+  const toggleShowSavedOnly = useTourStore((state) => state.toggleShowSavedOnly);
+
+  const visibleTours = showSavedOnly
+    ? tours.filter((tour) => savedIds.includes(tour.id))
+    : tours;
 
   return (
-    <section id="tours" className="bg-secondary py-24">
+    <section id="tours" className="scroll-mt-24 bg-secondary py-24">
       <div className="mx-auto w-[1200px] px-10">
-        <h2 className="text-center text-4xl text-primary">Populyar turlar</h2>
+        <h2 className="text-center text-4xl text-primary">
+          {showSavedOnly ? "Seçdiyiniz turlar" : "Populyar turlar"}
+        </h2>
         <p className="mx-auto mt-3 w-[620px] text-center text-muted-foreground">
-          Ən çox seçilən istiqamətlər. Bəyəndiyinizi ürək işarəsi ilə yadda
-          saxlaya bilərsiniz.
+          {showSavedOnly
+            ? "Yadda saxladığınız turlar. Sifariş üçün bizimlə əlaqə saxlayın."
+            : "Ən çox seçilən istiqamətlər. Bəyəndiyinizi ürək işarəsi ilə yadda saxlaya bilərsiniz."}
         </p>
 
+        {showSavedOnly && (
+          <div className="mt-6 text-center">
+            <Button variant="outline" onClick={toggleShowSavedOnly}>
+              Bütün turları göstər
+            </Button>
+          </div>
+        )}
+
         <div className="mt-14 grid grid-cols-3 gap-6">
-          {tours.map((tour) => {
+          {visibleTours.map((tour) => {
             const saved = savedIds.includes(tour.id);
 
             return (
@@ -61,7 +78,11 @@ function Tours() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Seçilmişlərə əlavə et"
+                    aria-label={
+                      saved
+                        ? `${tour.title} turunu seçilmişlərdən çıxar`
+                        : `${tour.title} turunu seçilmişlərə əlavə et`
+                    }
                     aria-pressed={saved}
                     onClick={() => toggleSaved(tour.id)}
                   >

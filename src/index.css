@@ -127,5 +127,7 @@
     }
   html {
     @apply font-sans;
+    /* Naviqasiya linkləri hamar sürüşsün */
+    scroll-behavior: smooth;
     }
 }
