@@ -90,8 +90,10 @@ export default async function handler(req, res) {
     return res.end(JSON.stringify({ errors }));
   }
 
-  const url = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Panelə yapışdırarkən əvvəl/sonda boşluq və ya sətir sonu qalması
+  // çox rast gəlinən haldır — bağlantı sınmasın deyə təmizləyirik
+  const url = process.env.SUPABASE_URL?.trim();
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
   if (!url || !serviceKey) {
     // Açarlar qurulmayıbsa sorğunu itirmirik — ən azı loga yazırıq
