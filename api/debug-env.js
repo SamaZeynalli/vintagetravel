@@ -28,9 +28,21 @@ export default async function handler(req, res) {
         .from("inquiries")
         .select("id", { count: "exact", head: true });
 
-      dbCheck = error
-        ? { uğurlu: false, kod: error.code, mesaj: error.message, detal: error.details, ipucu: error.hint }
-        : { uğurlu: true, qeyd: "cədvəl mövcuddur və oxunur" };
+      const readResult = error
+        ? { kod: error.code, mesaj: error.message }
+        : { qeyd: "oxunur" };
+
+      // Əsl yoxlama: yazmaq mümkündürmü
+      const { error: insertError } = await supabase
+        .from("inquiries")
+        .insert({ name: "__diaqnostika__", phone: "000", status: "test" });
+
+      dbCheck = {
+        oxuma: readResult,
+        yazma: insertError
+          ? { uğurlu: false, kod: insertError.code, mesaj: insertError.message, ipucu: insertError.hint }
+          : { uğurlu: true },
+      };
     } catch (e) {
       dbCheck = { uğurlu: false, istisna: String(e && e.message ? e.message : e) };
     }
@@ -54,6 +66,16 @@ export default async function handler(req, res) {
           uzunluq: key ? key.length : 0,
           boşluqVar: key ? key !== key.trim() : false,
         },
+        açarRolu: (() => {
+          try {
+            const payload = JSON.parse(
+              Buffer.from(key.split(".")[1], "base64").toString("utf8"),
+            );
+            return payload.role || "(role sahəsi yoxdur)";
+          } catch {
+            return "(JWT deyil - yeni formatlı açar ola bilər)";
+          }
+        })(),
         dbCheck,
         vercelEnv: process.env.VERCEL_ENV || "(yoxdur)",
       },
