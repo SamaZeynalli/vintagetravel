@@ -6,6 +6,15 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+    /* Vintage Travel brend palitrası — bg-brand, text-sun kimi işlənir */
+    --color-brand: var(--brand);
+    --color-brand-deep: var(--brand-deep);
+    --color-brand-bright: var(--brand-bright);
+    --color-lagoon: var(--lagoon);
+    --color-sun: var(--sun);
+    --color-coral: var(--coral);
+    --color-sand: var(--sand);
+
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
@@ -49,14 +58,29 @@
 }
 
 :root {
-    /* Vintage Travel brend rəngləri — logodakı tünd firuzəyi və krem ton */
+    /* --------------------------------------------------------------
+       Vintage Travel brend palitrası.
+
+       --brand logodan birbaşa götürülüb: #246065.
+       Qalan rənglər onun ətrafında qurulub — firuzəyi + isti kəhrəba
+       klassik səyahət palitrasıdır və bir-birini tamamlayır.
+       -------------------------------------------------------------- */
+    --brand:        oklch(0.453 0.062 203);  /* logo rəngi */
+    --brand-deep:   oklch(0.305 0.052 205);  /* qradiyentlərin tünd ucu */
+    --brand-bright: oklch(0.605 0.085 200);  /* canlı firuzəyi */
+    --lagoon:       oklch(0.735 0.105 195);  /* açıq laguna tonu */
+    --sun:          oklch(0.805 0.135 75);   /* kəhrəba */
+    --coral:        oklch(0.675 0.155 35);   /* mərcan */
+    --sand:         oklch(0.915 0.035 85);   /* isti qum */
+
+    /* shadcn tokenləri — bütün komponentlər bunları oxuyur */
     --background: oklch(0.973 0.008 95);
     --foreground: oklch(0.24 0.021 200);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.24 0.021 200);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.24 0.021 200);
-    --primary: oklch(0.43 0.048 205);
+    --primary: var(--brand);
     --primary-foreground: oklch(0.985 0.005 95);
     --secondary: oklch(0.93 0.014 92);
     --secondary-foreground: oklch(0.33 0.04 205);
@@ -67,7 +91,7 @@
     --destructive: oklch(0.577 0.245 27.325);
     --border: oklch(0.88 0.014 95);
     --input: oklch(0.88 0.014 95);
-    --ring: oklch(0.43 0.048 205);
+    --ring: var(--brand);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);

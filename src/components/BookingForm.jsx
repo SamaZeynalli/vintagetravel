@@ -82,11 +82,11 @@ function BookingForm() {
     return (
       <section
         id="booking"
-        className="scroll-mt-24 border-t border-border bg-secondary py-24"
+        className="scroll-mt-24 bg-linear-to-b from-sand/60 to-background py-24"
       >
         <div className="mx-auto w-[1200px] px-10 text-center">
-          <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-primary">
-            <Check className="size-8 text-primary-foreground" />
+          <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-lagoon">
+            <Check className="size-8 text-brand-deep" />
           </div>
 
           <h2 className="mt-7 text-4xl text-primary">Sorğunuz qəbul edildi</h2>
@@ -114,7 +114,7 @@ function BookingForm() {
   return (
     <section
       id="booking"
-      className="scroll-mt-24 border-t border-border bg-secondary py-24"
+      className="scroll-mt-24 bg-linear-to-b from-sand/60 to-background py-24"
     >
       <div className="mx-auto flex w-[1200px] justify-between px-10">
         <div className="w-[440px]">
@@ -124,19 +124,21 @@ function BookingForm() {
             Sorğu göndərmək heç bir öhdəlik yaratmır.
           </p>
 
-          <ul className="mt-9 space-y-4 text-muted-foreground">
-            <li className="flex gap-3">
-              <span className="text-primary">01</span>
-              Sorğunuzu göndərirsiniz
-            </li>
-            <li className="flex gap-3">
-              <span className="text-primary">02</span>
-              Uyğun turları və qiymətləri hazırlayırıq
-            </li>
-            <li className="flex gap-3">
-              <span className="text-primary">03</span>
-              Telefonla əlaqə saxlayıb detalları dəqiqləşdiririk
-            </li>
+          <ul className="mt-9 space-y-5 text-muted-foreground">
+            {[
+              { n: "01", text: "Sorğunuzu göndərirsiniz", tone: "bg-sun text-brand-deep" },
+              { n: "02", text: "Uyğun turları və qiymətləri hazırlayırıq", tone: "bg-lagoon text-brand-deep" },
+              { n: "03", text: "Telefonla əlaqə saxlayıb detalları dəqiqləşdiririk", tone: "bg-coral text-white" },
+            ].map((step) => (
+              <li key={step.n} className="flex items-center gap-4">
+                <span
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-full text-sm ${step.tone}`}
+                >
+                  {step.n}
+                </span>
+                {step.text}
+              </li>
+            ))}
           </ul>
 
           <p className="mt-9 text-sm text-muted-foreground">
@@ -265,7 +267,7 @@ function BookingForm() {
             type="submit"
             size="lg"
             disabled={status === "sending"}
-            className="mt-7 w-full"
+            className="mt-7 w-full bg-linear-to-r from-brand to-brand-bright transition-transform hover:-translate-y-0.5"
           >
             <Send />
             {status === "sending" ? "Göndərilir..." : "Sorğu göndər"}

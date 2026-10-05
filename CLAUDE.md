@@ -128,14 +128,31 @@ degrades instead of looking broken.
 
 ### Styling: shadcn/ui + Tailwind v4
 
-Brand colors are defined **once**, as shadcn CSS variables in the `:root` block
-of `src/index.css` — a dark teal `--primary` sampled from the logo on a cream
-`--background`. Because every shadcn component reads those variables, the whole
-UI follows the brand automatically.
+Colors live **only** in the `:root` block of `src/index.css`, in two layers.
 
-So: style with semantic classes (`text-primary`, `bg-secondary`, `text-muted-foreground`,
-`border-border`). **Never hardcode a teal or cream hex value in a component** —
-changing the brand should mean editing `index.css` alone.
+**Layer 1 — the brand palette.** `--brand` is the logo's exact color, sampled from
+`logo.png`: `#246065` → `oklch(0.453 0.062 203)`. Around it sit `--brand-deep`,
+`--brand-bright`, `--lagoon`, `--sun` (amber), `--coral` and `--sand`. The warm
+accents are what make the page feel lively rather than flat; teal alone read as
+too muted. They are exposed to Tailwind through `@theme inline`, so `bg-brand`,
+`text-sun`, `from-brand-deep` etc. work like built-in colors.
+
+**Layer 2 — shadcn tokens.** `--primary` is `var(--brand)`, so every shadcn
+component follows the logo automatically. Prefer the semantic classes
+(`text-primary`, `bg-secondary`, `text-muted-foreground`, `border-border`) for
+ordinary UI, and reach for a palette color when you want deliberate accent.
+
+**Never hardcode a hex value in a component.** Changing the brand must mean
+editing `index.css` alone.
+
+**Tailwind strips classes built by interpolation.** `` `bg-${tone}` `` compiles to
+nothing. Both `Services.jsx` and `Tours.jsx` therefore keep a `TONES` map of full
+class strings and index into it — follow that pattern when adding colored
+variants, and after any palette change confirm the classes actually landed:
+
+```bash
+npm run build && grep -c 'bg-brand' dist/assets/*.css
+```
 
 Tailwind v4 has no `tailwind.config.js`. It is wired through the
 `@tailwindcss/vite` plugin, and theme tokens come from the `@theme inline` block

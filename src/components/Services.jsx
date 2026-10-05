@@ -6,6 +6,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+/**
+ * Ton adını konkret klaslara çevirir.
+ * Tailwind klasları şablonla yığılsa (`bg-${tone}`) build zamanı silinir,
+ * ona görə tam adlar burada açıq yazılır.
+ */
+const TONES = {
+  sun: { tile: "bg-sun/15", icon: "text-sun", line: "bg-sun" },
+  lagoon: { tile: "bg-lagoon/15", icon: "text-lagoon", line: "bg-lagoon" },
+  coral: { tile: "bg-coral/15", icon: "text-coral", line: "bg-coral" },
+  brand: { tile: "bg-brand/12", icon: "text-brand", line: "bg-brand" },
+};
+
 function Services() {
   return (
     <section id="services" className="scroll-mt-24 border-b border-border py-24">
@@ -18,15 +30,24 @@ function Services() {
         <div className="mt-14 grid grid-cols-3 gap-6">
           {services.map((service) => {
             const Icon = service.icon;
+            const tone = TONES[service.tone] ?? TONES.brand;
 
             return (
               <Card
                 key={service.id}
-                className="transition-shadow hover:shadow-md"
+                className="group relative overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
               >
+                {/* Üstdəki rəngli zolaq — kursor üstünə gələndə görünür */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-200 group-hover:scale-x-100 ${tone.line}`}
+                />
+
                 <CardHeader>
-                  <div className="mb-4 flex size-12 items-center justify-center rounded-lg bg-accent">
-                    <Icon className="size-6 text-primary" />
+                  <div
+                    className={`mb-4 flex size-12 items-center justify-center rounded-xl ${tone.tile}`}
+                  >
+                    <Icon className={`size-6 ${tone.icon}`} />
                   </div>
                   <CardTitle className="text-xl">{service.title}</CardTitle>
                   <CardDescription className="mt-2 leading-relaxed">

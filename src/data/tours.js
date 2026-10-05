@@ -1,7 +1,9 @@
 // Nümunə tur məlumatları — sonra real turlarla əvəz ediləcək.
+// tone: kartın üst zolağının rəngi (Tours.jsx-dəki TONES-a baxın).
 export const tours = [
   {
     id: "gabala",
+    tone: "lagoon",
     title: "Qəbələ",
     country: "Azərbaycan",
     duration: "2 gün / 1 gecə",
@@ -12,6 +14,7 @@ export const tours = [
   },
   {
     id: "istanbul",
+    tone: "coral",
     title: "İstanbul",
     country: "Türkiyə",
     duration: "4 gün / 3 gecə",
@@ -22,6 +25,7 @@ export const tours = [
   },
   {
     id: "dubai",
+    tone: "sun",
     title: "Dubay",
     country: "BƏƏ",
     duration: "5 gün / 4 gecə",
@@ -32,6 +36,7 @@ export const tours = [
   },
   {
     id: "sharm",
+    tone: "lagoon",
     title: "Şarm əl-Şeyx",
     country: "Misir",
     duration: "7 gün / 6 gecə",
@@ -42,6 +47,7 @@ export const tours = [
   },
   {
     id: "tbilisi",
+    tone: "brand",
     title: "Tbilisi",
     country: "Gürcüstan",
     duration: "3 gün / 2 gecə",
@@ -52,6 +58,7 @@ export const tours = [
   },
   {
     id: "prague",
+    tone: "coral",
     title: "Praqa",
     country: "Çexiya",
     duration: "6 gün / 5 gecə",

@@ -12,6 +12,14 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
+/** Tam klas adları — Tailwind şablonla yığılan klasları silir. */
+const TONES = {
+  lagoon: { bar: "bg-lagoon", badge: "bg-lagoon/15 text-brand-deep" },
+  coral: { bar: "bg-coral", badge: "bg-coral/15 text-coral" },
+  sun: { bar: "bg-sun", badge: "bg-sun/20 text-brand-deep" },
+  brand: { bar: "bg-brand", badge: "bg-brand/12 text-brand" },
+};
+
 function Tours() {
   const savedIds = useTourStore((state) => state.savedIds);
   const showSavedOnly = useTourStore((state) => state.showSavedOnly);
@@ -45,9 +53,18 @@ function Tours() {
         <div className="mt-14 grid grid-cols-3 gap-6">
           {visibleTours.map((tour) => {
             const saved = savedIds.includes(tour.id);
+            const tone = TONES[tour.tone] ?? TONES.brand;
 
             return (
-              <Card key={tour.id} className="flex flex-col">
+              <Card
+                key={tour.id}
+                className="relative flex flex-col overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+              >
+                {/* Kartın üstündəki rəngli zolaq */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-x-0 top-0 h-1.5 ${tone.bar}`}
+                />
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
@@ -58,7 +75,11 @@ function Tours() {
                       </p>
                     </div>
 
-                    {tour.tag && <Badge variant="secondary">{tour.tag}</Badge>}
+                    {tour.tag && (
+                      <Badge className={`border-transparent ${tone.badge}`}>
+                        {tour.tag}
+                      </Badge>
+                    )}
                   </div>
                 </CardHeader>
 
@@ -73,7 +94,7 @@ function Tours() {
                 </CardContent>
 
                 <CardFooter className="justify-between border-t border-border pt-5">
-                  <span className="text-xl text-primary">{tour.price}</span>
+                  <span className="text-2xl font-medium text-brand">{tour.price}</span>
 
                   <Button
                     variant="ghost"
@@ -87,7 +108,10 @@ function Tours() {
                     onClick={() => toggleSaved(tour.id)}
                   >
                     <Heart
-                      className={cn(saved && "fill-primary text-primary")}
+                      className={cn(
+                        "transition-colors",
+                        saved ? "fill-coral text-coral" : "hover:text-coral",
+                      )}
                     />
                   </Button>
                 </CardFooter>

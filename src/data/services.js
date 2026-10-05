@@ -1,9 +1,11 @@
 import { Plane, BedDouble, FileCheck, ShieldCheck, Ship, Globe2 } from "lucide-react";
 
 // Nümunə xidmətlər — sonra real siyahı ilə əvəz ediləcək.
+// tone: kartın ikon rəngini təyin edir (Services.jsx-dəki TONES-a baxın).
 export const services = [
   {
     id: "avia",
+    tone: "sun",
     icon: Plane,
     title: "Aviabiletlər",
     description:
@@ -11,6 +13,7 @@ export const services = [
   },
   {
     id: "hotel",
+    tone: "lagoon",
     icon: BedDouble,
     title: "Otel rezervasiyası",
     description:
@@ -18,6 +21,7 @@ export const services = [
   },
   {
     id: "visa",
+    tone: "coral",
     icon: FileCheck,
     title: "Viza dəstəyi",
     description:
@@ -25,6 +29,7 @@ export const services = [
   },
   {
     id: "insurance",
+    tone: "brand",
     icon: ShieldCheck,
     title: "Səyahət sığortası",
     description:
@@ -32,6 +37,7 @@ export const services = [
   },
   {
     id: "cruise",
+    tone: "lagoon",
     icon: Ship,
     title: "Kruiz turları",
     description:
@@ -39,6 +45,7 @@ export const services = [
   },
   {
     id: "corporate",
+    tone: "sun",
     icon: Globe2,
     title: "Korporativ səfərlər",
     description:
