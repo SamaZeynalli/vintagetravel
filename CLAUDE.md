@@ -209,9 +209,13 @@ so don't assume a WebP conversion worked without checking the file exists.
 ## Git
 
 Single `main` branch, pushed to `github.com/SamaZeynalli/vintagetravel` (public)
-over SSH. The owner works directly on `main` — solo project, no deployment yet,
-so branch protection and a `dev` branch would only add friction. Revisit if the
-site goes live.
+over SSH. The owner works directly on `main` — solo project, so branch protection
+and a `dev` branch would only add friction.
+
+**The site is live at https://vintagetravel.vercel.app** and Vercel auto-deploys
+every push to `main`, usually within a minute. That URL is shared with a client as
+a demo, so a broken push is visible to them immediately — run `npm run build`
+before pushing.
 
 Note this repo lives inside `~/Desktop/`, and `~` itself was once an accidental
 git repo. That has been cleaned up, but always confirm `git rev-parse --show-toplevel`
