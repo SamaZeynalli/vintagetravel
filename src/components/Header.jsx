@@ -9,6 +9,7 @@ const navLinks = [
   { label: "Ana səhifə", href: "#hero" },
   { label: "Xidmətlər", href: "#services" },
   { label: "Turlar", href: "#tours" },
+  { label: "Sifariş", href: "#booking" },
   { label: "Əlaqə", href: "#contact" },
 ];
 

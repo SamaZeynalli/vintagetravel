@@ -11,6 +11,9 @@ npm run preview  # serve the production build
 npm run lint     # oxlint
 ```
 
+`npm run dev` also serves `/api/inquiry` (see Backend below), so the booking
+form can be tested locally without deploying.
+
 There is **no test framework** in this project. Do not invent test commands or
 suggest `npm test` — it does not exist. Verify changes with `npm run build` and
 by looking at the dev server.
@@ -32,11 +35,11 @@ context, custom hooks, or advanced patterns unless the task actually needs them.
 
 ### Composition
 
-`src/App.jsx` renders `Header` plus three section components (`Hero`,
-`Services`, `Tours`). Each section is self-contained: it owns its own `<section>`
-wrapper, its own background, and its own width container. Adding a section means
-writing one component and dropping it into `App.jsx` — there is no router and no
-layout component.
+`src/App.jsx` renders `Header`, four section components (`Hero`, `Services`,
+`Tours`, `BookingForm`) and `Footer`. Each section is self-contained: it owns its
+own `<section>` wrapper, its own background, and its own width container. Adding
+a section means writing one component and dropping it into `App.jsx` — there is
+no router and no layout component.
 
 ### Content lives in `src/data/`
 
@@ -75,6 +78,53 @@ localStorage (key `vintage-travel-tours`). `partialize` deliberately keeps
 `showSavedOnly` out of storage — a filter toggle should not be sticky across
 visits. Changing the stored shape means users with old localStorage get stale
 data, so bump the `name` or add a `version` when that happens.
+
+### Backend: one serverless function
+
+`api/inquiry.js` is the only server-side code. Vercel turns every file in `api/`
+into a serverless function automatically, so it is served at `/api/inquiry` in
+production with no routing config.
+
+It accepts the booking form POST, validates it, and inserts a row into Supabase.
+Three things about it are deliberate:
+
+- **The Supabase key never reaches the browser.** `SUPABASE_SERVICE_ROLE_KEY` is
+  read from `process.env` inside the function. Never import it into `src/`, and
+  never prefix it with `VITE_` — that would publish it in the client bundle.
+- **It validates server-side, not just in the form.** Anyone can POST directly,
+  so `validate()` in the function is the real guard; the form's checks are only
+  for fast feedback.
+- **The hidden `website` field is a spam honeypot.** If it is filled, the request
+  is answered `200 OK` and silently dropped, so bots don't retry.
+
+Error responses are shaped for the form: `422` carries `{ errors: { field: "…" } }`
+for per-field messages, everything else carries `{ error: "…" }` for a banner. All
+of those strings are user-facing, so they are in Azerbaijani.
+
+**Vite does not know about `api/`.** `devApiPlugin()` in `vite.config.js` mounts
+the same handler during `npm run dev`, so the form works end to end locally. The
+config also copies `.env` into `process.env` via `loadEnv` for that reason.
+Without it you would need `vercel dev`.
+
+### Database: Supabase
+
+One table, defined in `supabase/schema.sql` — run it once in the Supabase SQL
+Editor. Row Level Security is **on with no public policies**, so the anon key
+cannot read or write `inquiries`; only the service-role key in the function gets
+through. Keep it that way: adding a public insert policy would let anyone spam
+the table directly.
+
+Required env vars (see `.env.example`), set in both `.env` locally and Vercel's
+Project Settings → Environment Variables:
+
+```
+SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+```
+
+When they are missing the function logs the submission and returns `503` with a
+"call us instead" message rather than crashing — so a misconfigured deploy
+degrades instead of looking broken.
 
 ### Styling: shadcn/ui + Tailwind v4
 

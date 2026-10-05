@@ -14,6 +14,12 @@ const contactItems = [
   { icon: MapPin, label: CONTACT.address, href: null },
 ];
 
+const sectionLinks = [
+  { label: "Xidmətlər", href: "#services" },
+  { label: "Turlar", href: "#tours" },
+  { label: "Sifariş", href: "#booking" },
+];
+
 function Footer() {
   return (
     <footer
@@ -35,6 +41,7 @@ function Footer() {
             <ul className="mt-5 space-y-3">
               {contactItems.map((item) => {
                 const Icon = item.icon;
+                const isExternal = item.href?.startsWith("http");
 
                 const content = (
                   <>
@@ -48,12 +55,8 @@ function Footer() {
                     {item.href ? (
                       <a
                         href={item.href}
-                        target={item.href.startsWith("http") ? "_blank" : undefined}
-                        rel={
-                          item.href.startsWith("http")
-                            ? "noreferrer noopener"
-                            : undefined
-                        }
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noreferrer noopener" : undefined}
                         className="flex items-center gap-2.5 text-muted-foreground transition-colors hover:text-primary"
                       >
                         {content}
@@ -72,22 +75,16 @@ function Footer() {
           <div>
             <h3 className="text-lg text-primary">Bölmələr</h3>
             <ul className="mt-5 space-y-3">
-              <li>
-                <a
-                  href="#services"
-                  className="text-muted-foreground transition-colors hover:text-primary"
-                >
-                  Xidmətlər
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#tours"
-                  className="text-muted-foreground transition-colors hover:text-primary"
-                >
-                  Turlar
-                </a>
-              </li>
+              {sectionLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
