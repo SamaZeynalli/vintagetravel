@@ -5,7 +5,9 @@
  * DƏYƏRLƏRİ QAYTARMIR — yalnız adların mövcudluğunu və uzunluğunu bildirir.
  * Problem həll olunandan sonra bu fayl silinməlidir.
  */
-export default function handler(req, res) {
+import { createClient } from "@supabase/supabase-js";
+
+export default async function handler(req, res) {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -14,6 +16,25 @@ export default function handler(req, res) {
   const supabaseVarNames = Object.keys(process.env)
     .filter((name) => /supabase/i.test(name))
     .sort();
+
+  // Bazaya real sorğu göndərib xətanın dəqiq səbəbini öyrənirik
+  let dbCheck = { yoxlanılmadı: true };
+  if (url && key) {
+    try {
+      const supabase = createClient(url.trim(), key.trim(), {
+        auth: { persistSession: false },
+      });
+      const { error } = await supabase
+        .from("inquiries")
+        .select("id", { count: "exact", head: true });
+
+      dbCheck = error
+        ? { uğurlu: false, kod: error.code, mesaj: error.message, detal: error.details, ipucu: error.hint }
+        : { uğurlu: true, qeyd: "cədvəl mövcuddur və oxunur" };
+    } catch (e) {
+      dbCheck = { uğurlu: false, istisna: String(e && e.message ? e.message : e) };
+    }
+  }
 
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.statusCode = 200;
@@ -33,6 +54,7 @@ export default function handler(req, res) {
           uzunluq: key ? key.length : 0,
           boşluqVar: key ? key !== key.trim() : false,
         },
+        dbCheck,
         vercelEnv: process.env.VERCEL_ENV || "(yoxdur)",
       },
       null,
