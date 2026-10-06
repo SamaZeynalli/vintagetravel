@@ -42,8 +42,12 @@ export const AGENTS = [
   },
 ];
 
-/** Header kimi tək nömrə lazım olan yerlər üçün əsas əlaqə. */
-export const PRIMARY_AGENT = AGENTS[0];
+/**
+ * Header kimi tək nömrə lazım olan yerlər üçün əsas əlaqə.
+ * Sahibinin seçimi ilə əsas nömrə Vüsalə xanımındır.
+ */
+export const PRIMARY_AGENT =
+  AGENTS.find((agent) => agent.id === "vusala") ?? AGENTS[0];
 
 /** Hazır mətnlə WhatsApp söhbətini açan link qurur. */
 export function whatsappLink(agent, message = "Salam! Saytınız vasitəsilə yazıram.") {
