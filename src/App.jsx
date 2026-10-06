@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import Tours from "@/components/Tours";
 import BookingForm from "@/components/BookingForm";
+import Contacts from "@/components/Contacts";
 import Footer from "@/components/Footer";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Services />
         <Tours />
         <BookingForm />
+        <Contacts />
       </main>
       <Footer />
     </>

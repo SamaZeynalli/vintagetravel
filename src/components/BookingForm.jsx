@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Check, Phone, Send } from "lucide-react";
 import { tours } from "@/data/tours";
-import { CONTACT } from "@/data/contact";
+import { PRIMARY_AGENT, whatsappLink } from "@/data/contact";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 import { useTourStore } from "@/store/useTourStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -97,9 +98,23 @@ function BookingForm() {
 
           <div className="mt-8 flex items-center justify-center gap-4">
             <Button asChild>
-              <a href={`tel:${CONTACT.phoneHref}`}>
+              <a href={`tel:${PRIMARY_AGENT.phoneHref}`}>
                 <Phone />
-                {CONTACT.phone}
+                {PRIMARY_AGENT.phone}
+              </a>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="border-[#25D366]/40 text-[#128C7E] hover:bg-[#25D366]/10 hover:text-[#128C7E]"
+            >
+              <a
+                href={whatsappLink(PRIMARY_AGENT)}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <WhatsAppIcon className="size-4" />
+                WhatsApp
               </a>
             </Button>
             <Button variant="outline" onClick={() => setStatus("idle")}>
@@ -144,10 +159,14 @@ function BookingForm() {
           <p className="mt-9 text-sm text-muted-foreground">
             Zəng etmək daha rahatdırsa:{" "}
             <a
-              href={`tel:${CONTACT.phoneHref}`}
+              href={`tel:${PRIMARY_AGENT.phoneHref}`}
               className="text-primary underline underline-offset-4"
             >
-              {CONTACT.phone}
+              {PRIMARY_AGENT.phone}
+            </a>{" "}
+            · bütün nömrələr{" "}
+            <a href="#contact" className="text-primary underline underline-offset-4">
+              Əlaqə bölməsində
             </a>
           </p>
         </div>

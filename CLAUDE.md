@@ -35,8 +35,9 @@ context, custom hooks, or advanced patterns unless the task actually needs them.
 
 ### Composition
 
-`src/App.jsx` renders `Header`, four section components (`Hero`, `Services`,
-`Tours`, `BookingForm`) and `Footer`. Each section is self-contained: it owns its
+`src/App.jsx` renders `Header`, five section components (`Hero`, `Services`,
+`Tours`, `BookingForm`, `Contacts`) and `Footer`. The `#contact` anchor belongs to
+`Contacts`, not the footer. Each section is self-contained: it owns its
 own `<section>` wrapper, its own background, and its own width container. Adding
 a section means writing one component and dropping it into `App.jsx` — there is
 no router and no layout component.
@@ -44,9 +45,23 @@ no router and no layout component.
 ### Content lives in `src/data/`
 
 `tours.js` and `services.js` export plain arrays that the section components map
-over. `contact.js` exports a single `CONTACT` object — phone, email, address,
-Instagram — consumed by both `Header` and `Footer`. Copy changes belong in these
-files, not inline in JSX. Never hardcode a phone number or email in a component.
+over. Copy changes belong in these files, not inline in JSX.
+
+`contact.js` exports three things and is consumed by `Header`, `Contacts`,
+`BookingForm` and `Footer`:
+
+- `AGENTS` — the three real staff numbers. Each carries `phone` (display format),
+  `phoneHref` (digits for `tel:`) and `whatsapp` (digits only, no `+`, for `wa.me`).
+  Those three shapes exist because each link type needs a different format; keep
+  them in sync when a number changes.
+- `PRIMARY_AGENT` — `AGENTS[0]`, for places that need exactly one number (header
+  call button, booking-form success screen).
+- `whatsappLink(agent, message?)` — builds a `wa.me` URL with a pre-filled,
+  URL-encoded Azerbaijani greeting. Always use it rather than writing `wa.me`
+  URLs by hand.
+
+`CONTACT` now holds only the shared details (email, address, Instagram) — it has
+no `phone` field. Never hardcode a phone number or email in a component.
 
 **This data is placeholder content that Claude invented.** Real tour names,
 prices, and the contact details in `contact.js` (`+994 00 000 00 00`,
@@ -197,9 +212,14 @@ scrolling is set once on `html` in `index.css`.
 
 **lucide-react v1 has no brand icons.** `Instagram`, `Facebook`, `Twitter` etc.
 are not exported and importing them fails the build with "Missing export".
-Hand-written brand glyphs live in `src/components/icons/` in lucide's style
-(24×24, `stroke="currentColor"`, `strokeWidth="2"`) so `size-*` classes and
-`text-*` colors work identically. Verify an icon exists before importing it:
+Hand-written brand glyphs live in `src/components/icons/`: `InstagramIcon` in
+lucide's stroke style (24×24, `stroke="currentColor"`, `strokeWidth="2"`) and
+`WhatsAppIcon`, which uses `fill="currentColor"` because the mark is too intricate
+to stroke. Both respond to `size-*` and `text-*` like any lucide icon.
+
+WhatsApp buttons intentionally use the brand's own green as literal hex
+(`#25D366` / `#128C7E`) rather than a palette token — it is WhatsApp's identity,
+not ours, and is the one sanctioned exception to the no-hardcoded-color rule. Verify an icon exists before importing it:
 
 ```bash
 node -e "console.log(Object.keys(require('lucide-react')).filter(n=>/Name/i.test(n)))"

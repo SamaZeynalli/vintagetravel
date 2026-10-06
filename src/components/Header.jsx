@@ -1,7 +1,8 @@
 import { Heart, Phone } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
-import { CONTACT } from "@/data/contact";
+import { PRIMARY_AGENT, whatsappLink } from "@/data/contact";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 import { useTourStore } from "@/store/useTourStore";
 import { cn } from "@/lib/utils";
 
@@ -55,10 +56,26 @@ function Header() {
             </Button>
           )}
 
+          <Button
+            asChild
+            variant="outline"
+            size="icon"
+            title="WhatsApp ilə yazın"
+            className="border-[#25D366]/40 text-[#128C7E] hover:bg-[#25D366]/10 hover:text-[#128C7E]"
+          >
+            <a
+              href={whatsappLink(PRIMARY_AGENT)}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <WhatsAppIcon className="size-4" />
+            </a>
+          </Button>
+
           <Button asChild>
-            <a href={`tel:${CONTACT.phoneHref}`}>
+            <a href={`tel:${PRIMARY_AGENT.phoneHref}`}>
               <Phone />
-              {CONTACT.phone}
+              {PRIMARY_AGENT.phone}
             </a>
           </Button>
         </div>
