@@ -205,10 +205,17 @@ Do not "helpfully" add responsive behavior while working on something else.
 
 ## Two easy things to get wrong
 
-**Anchor targets need `scroll-mt-24`.** The header is `sticky top-0` and `h-24`.
-Any section with an `id` that the nav links to must carry `scroll-mt-24`, or
-clicking the nav parks the section's heading underneath the header. Smooth
-scrolling is set once on `html` in `index.css`.
+**Anchor targets need `scroll-mt-28`.** The header is `sticky top-0` and `h-28`
+(it stacks three agent phone numbers). Any section with an `id` that the nav links
+to must carry a matching `scroll-mt-28`, or clicking the nav parks the section's
+heading underneath the header. **These two numbers must change together** — if the
+header height changes again, update every `scroll-mt-*` in `src/components/`:
+
+```bash
+grep -rn 'scroll-mt-' src/components/
+```
+
+Smooth scrolling is set once on `html` in `index.css`.
 
 **lucide-react v1 has no brand icons.** `Instagram`, `Facebook`, `Twitter` etc.
 are not exported and importing them fails the build with "Missing export".

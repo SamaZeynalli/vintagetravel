@@ -83,7 +83,7 @@ function BookingForm() {
     return (
       <section
         id="booking"
-        className="scroll-mt-24 bg-linear-to-b from-sand/60 to-background py-24"
+        className="scroll-mt-28 bg-linear-to-b from-sand/60 to-background py-24"
       >
         <div className="mx-auto w-[1200px] px-10 text-center">
           <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-lagoon">
@@ -129,7 +129,7 @@ function BookingForm() {
   return (
     <section
       id="booking"
-      className="scroll-mt-24 bg-linear-to-b from-sand/60 to-background py-24"
+      className="scroll-mt-28 bg-linear-to-b from-sand/60 to-background py-24"
     >
       <div className="mx-auto flex w-[1200px] justify-between px-10">
         <div className="w-[440px]">

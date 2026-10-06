@@ -20,7 +20,7 @@ const TONES = {
 
 function Services() {
   return (
-    <section id="services" className="scroll-mt-24 border-b border-border py-24">
+    <section id="services" className="scroll-mt-28 border-b border-border py-24">
       <div className="mx-auto w-[1200px] px-10">
         <h2 className="text-center text-4xl text-primary">Xidmətlərimiz</h2>
         <p className="mx-auto mt-3 w-[620px] text-center text-muted-foreground">

@@ -14,7 +14,7 @@ function Hero() {
   return (
     <section
       id="hero"
-      className="relative scroll-mt-24 overflow-hidden bg-linear-to-br from-brand-deep via-brand to-brand-bright"
+      className="relative scroll-mt-28 overflow-hidden bg-linear-to-br from-brand-deep via-brand to-brand-bright"
     >
       {/* Logodakı kompas — fonda incə su nişanı kimi */}
       <img

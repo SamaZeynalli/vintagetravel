@@ -31,7 +31,7 @@ function Tours() {
     : tours;
 
   return (
-    <section id="tours" className="scroll-mt-24 bg-secondary py-24">
+    <section id="tours" className="scroll-mt-28 bg-secondary py-24">
       <div className="mx-auto w-[1200px] px-10">
         <h2 className="text-center text-4xl text-primary">
           {showSavedOnly ? "Seçdiyiniz turlar" : "Populyar turlar"}
