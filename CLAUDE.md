@@ -141,6 +141,28 @@ When they are missing the function logs the submission and returns `503` with a
 "call us instead" message rather than crashing — so a misconfigured deploy
 degrades instead of looking broken.
 
+### Email notification
+
+After a successful insert, `sendNotification()` emails the agency through Resend.
+It is **deliberately silent on failure**: it logs and returns, never throws. The
+inquiry is already saved at that point, and a mail outage must not cost a lead or
+show the customer an error.
+
+```
+RESEND_API_KEY   # resend.com → API Keys
+NOTIFY_EMAIL     # where alerts land; comma-separated for several recipients
+RESEND_FROM      # optional sender override
+```
+
+Until the agency owns a domain, `RESEND_FROM` stays `onboarding@resend.dev`, and
+**Resend will only deliver to the address that owns the Resend account** — so
+`NOTIFY_EMAIL` must match it. Once a domain is verified, that restriction lifts
+and several recipients work.
+
+The mail sets `replyTo` to the customer's address and includes `tel:` and `wa.me`
+buttons, so answering is one tap. All customer-supplied values pass through
+`escapeHtml()` before reaching the template.
+
 ### Styling: shadcn/ui + Tailwind v4
 
 Colors live **only** in the `:root` block of `src/index.css`, in two layers.

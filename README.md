@@ -69,6 +69,25 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 Gələn sorğulara Supabase panelində **Table Editor → inquiries** bölməsindən baxılır.
 
+## E-poçt bildirişi
+
+Yeni sorğu gələndə mail göndərmək üçün:
+
+1. **resend.com**-da pulsuz hesab açın — **bildirişi almaq istədiyiniz ünvanla**
+2. API Keys → yeni açar yaradın
+3. Vercel-ə iki dəyişən əlavə edin:
+
+```
+RESEND_API_KEY=re_...
+NOTIFY_EMAIL=sizin@mail.com
+```
+
+Domen alınana qədər Resend yalnız hesabın öz ünvanına göndərə bilir, ona görə
+`NOTIFY_EMAIL` Resend hesabının ünvanı ilə eyni olmalıdır.
+
+Bu dəyişənlər olmasa sayt işləməyə davam edir — sorğu bazaya yazılır, sadəcə
+mail getmir.
+
 > `service_role` açarı tam giriş hüququna malikdir. Onu heç vaxt frontend koduna
 > yazmayın və `VITE_` prefiksi ilə adlandırmayın — əks halda brauzerə düşər.
 

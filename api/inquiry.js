@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 
 /**
  * Sifariş formundan gələn sorğuları qəbul edən serverless funksiya.
@@ -63,6 +64,83 @@ async function readBody(req) {
   }
 }
 
+
+/** Mətni HTML-ə salmazdan əvvəl təhlükəsiz hala gətirir. */
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/**
+ * Yeni sorğu barədə e-poçt bildirişi göndərir.
+ *
+ * Bilərəkdən "sakit" işləyir: mail getməsə belə xəta atmır, çünki sorğu
+ * artıq bazaya yazılıb. Bildiriş problemi ucbatından müştəri itirilməməlidir.
+ */
+async function sendNotification(values) {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const to = process.env.NOTIFY_EMAIL?.trim();
+
+  if (!apiKey || !to) {
+    console.warn("[inquiry] RESEND_API_KEY / NOTIFY_EMAIL yoxdur — mail göndərilmədi");
+    return;
+  }
+
+  // Domen alınana qədər Resend-in test ünvanından göndəririk
+  const from = process.env.RESEND_FROM?.trim() || "Vintage Travel <onboarding@resend.dev>";
+
+  const waNumber = values.phone.replace(/\D/g, "");
+  const row = (label, value) =>
+    value
+      ? `<tr>
+           <td style="padding:8px 14px;color:#6b7b7a;white-space:nowrap">${label}</td>
+           <td style="padding:8px 14px;color:#23302f"><strong>${escapeHtml(value)}</strong></td>
+         </tr>`
+      : "";
+
+  try {
+    const resend = new Resend(apiKey);
+
+    await resend.emails.send({
+      from,
+      to: to.split(",").map((address) => address.trim()),
+      // Cavab düyməsi birbaşa müştəriyə yazsın
+      replyTo: values.email || undefined,
+      subject: `Yeni sorğu — ${values.name}${values.tour ? ` (${values.tour})` : ""}`,
+      html: `
+        <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:560px">
+          <h2 style="color:#246065;margin:0 0 4px">Yeni sifariş sorğusu</h2>
+          <p style="color:#6b7b7a;margin:0 0 20px">vintagetravel.vercel.app saytından</p>
+
+          <table style="border-collapse:collapse;width:100%;background:#f6f3ec;border-radius:8px">
+            ${row("Ad", values.name)}
+            ${row("Telefon", values.phone)}
+            ${row("E-poçt", values.email)}
+            ${row("Tur", values.tour)}
+            ${row("Qeyd", values.message)}
+          </table>
+
+          <p style="margin:24px 0 0">
+            <a href="tel:${escapeHtml(values.phone)}"
+               style="background:#246065;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;margin-right:8px">
+              Zəng et
+            </a>
+            <a href="https://wa.me/${waNumber}"
+               style="background:#25D366;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none">
+              WhatsApp
+            </a>
+          </p>
+        </div>
+      `,
+    });
+  } catch (error) {
+    console.error("[inquiry] bildiriş maili göndərilmədi:", error);
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.statusCode = 405;
@@ -123,6 +201,9 @@ export default async function handler(req, res) {
     });
 
     if (error) throw error;
+
+    // Sorğu yazıldı — indi bildiriş. Uğursuz olsa belə cavabı dəyişmir.
+    await sendNotification(values);
 
     res.statusCode = 200;
     return res.end(JSON.stringify({ ok: true }));
